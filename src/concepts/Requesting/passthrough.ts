@@ -26,11 +26,34 @@
 
 export const inclusions: Record<string, string> = {
   // Feel free to delete these example inclusions
-  "/api/LikertSurvey/_getSurveyQuestions": "this is a public query",
-  "/api/LikertSurvey/_getSurveyResponses": "responses are public",
-  "/api/LikertSurvey/_getRespondentAnswers": "answers are visible",
-  "/api/LikertSurvey/submitResponse": "allow anyone to submit response",
-  "/api/LikertSurvey/updateResponse": "allow anyone to update their response",
+  "/api/PasswordAuthentication/register": "public can register",
+  "/api/PasswordAuthentication/authenticate":
+    "public can try to get authenticated",
+  "/api/Notification/createNotification": "",
+  "/api/Notification/deleteNotification": "",
+  "/api/Notification/_getAllNotifications": "",
+  "/api/Notification/getNotificationMessageAndFreq": "",
+  "/api/PasswordAuthentication/_getUserUsername": "",
+  "/api/ProgressTracking/createPlan": "",
+  "/api/ProgressTracking/addAmount": "",
+  "/api/ProgressTracking/removeAmount": "",
+  "/api/ProgressTracking/deletePlan": "",
+  "/api/ProgressTracking/modifyPlan": "",
+  "/api/ProgressTracking/updateGoalStatus": "",
+  "/api/ProgressTracking/_getPlans": "",
+  "/api/TripCostEstimation/_parseLLMCostEstimate": "",
+  "/api/TripCostEstimation/createTravelPlan": "",
+  "/api/TripCostEstimation/deleteTravelPlan": "",
+  "/api/TripCostEstimation/updateNecessity": "",
+  "/api/TripCostEstimation/resetNecessity": "",
+  "/api/TripCostEstimation/generateAICostEstimate": "",
+  "/api/TripCostEstimation/editEstimateCost": "",
+  "/api/TripCostEstimation/deleteEstimateCost": "",
+  "/api/TripCostEstimation/getTravelCities": "",
+  "/api/TripCostEstimation/getTravelDates": "",
+  "/api/TripCostEstimation/estimateCost": "",
+  "/api/TripCostEstimation/_getAllTravelPlans": "",
+  "/api/PasswordAuthentication/_getAllUsers": "",
 };
 
 /**
@@ -43,8 +66,4 @@ export const inclusions: Record<string, string> = {
  * exclusions = ["route"]
  */
 
-export const exclusions: Array<string> = [
-  // Feel free to delete these example exclusions
-  "/api/LikertSurvey/createSurvey",
-  "/api/LikertSurvey/addQuestion",
-];
+export const exclusions: Array<string> = [];

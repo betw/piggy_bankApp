@@ -10,7 +10,6 @@ import "jsr:@std/dotenv/load"; // Ensure environment variables are loaded for Ge
 
 // Import the concept class and its dependencies
 import TripCostEstimationConcept from "./TripCostEstimationConcept.ts";
-import { GeminiLLM } from "@utils/gemini-llm.ts";
 
 // Helper types from the concept for clarity in tests (module-scoped, consistent with concept)
 type User = ID;
