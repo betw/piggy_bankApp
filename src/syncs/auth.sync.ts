@@ -1,32 +1,32 @@
 import { actions, Sync } from "@engine";
-import {
-  PasswordAuthentication as UserAuthentication,
-  Requesting,
-  Sessioning,
-} from "@concepts";
+import { PasswordAuthentication, Requesting, Sessioning } from "@concepts";
 
 //-- User Registration --//
 export const RegisterRequest: Sync = ({ request, username, password }) => ({
   when: actions([Requesting.request, {
-    path: "/UserAuthentication/register",
+    path: "/PasswordAuthentication/register",
     username,
     password,
   }, { request }]),
-  then: actions([UserAuthentication.register, { username, password }]),
+  then: actions([PasswordAuthentication.register, { username, password }]),
 });
 
 export const RegisterResponseSuccess: Sync = ({ request, user }) => ({
   when: actions(
-    [Requesting.request, { path: "/UserAuthentication/register" }, { request }],
-    [UserAuthentication.register, {}, { user }],
+    [Requesting.request, { path: "/PasswordAuthentication/register" }, {
+      request,
+    }],
+    [PasswordAuthentication.register, {}, { user }],
   ),
   then: actions([Requesting.respond, { request, user }]),
 });
 
 export const RegisterResponseError: Sync = ({ request, error }) => ({
   when: actions(
-    [Requesting.request, { path: "/UserAuthentication/register" }, { request }],
-    [UserAuthentication.register, {}, { error }],
+    [Requesting.request, { path: "/PasswordAuthentication/register" }, {
+      request,
+    }],
+    [PasswordAuthentication.register, {}, { error }],
   ),
   then: actions([Requesting.respond, { request, error }]),
 });
@@ -36,18 +36,18 @@ export const LoginRequest: Sync = ({ request, username, password }) => ({
   when: actions([Requesting.request, { path: "/login", username, password }, {
     request,
   }]),
-  then: actions([UserAuthentication.authenticate, { username, password }]),
+  then: actions([PasswordAuthentication.authenticate, { username, password }]),
 });
 
 export const LoginSuccessCreatesSession: Sync = ({ user }) => ({
-  when: actions([UserAuthentication.authenticate, {}, { user }]),
+  when: actions([PasswordAuthentication.authenticate, {}, { user }]),
   then: actions([Sessioning.create, { user }]),
 });
 
 export const LoginResponseSuccess: Sync = ({ request, user, session }) => ({
   when: actions(
     [Requesting.request, { path: "/login" }, { request }],
-    [UserAuthentication.authenticate, {}, { user }],
+    [PasswordAuthentication.authenticate, {}, { user }],
     [Sessioning.create, { user }, { session }],
   ),
   then: actions([Requesting.respond, { request, session }]),
@@ -56,7 +56,7 @@ export const LoginResponseSuccess: Sync = ({ request, user, session }) => ({
 export const LoginResponseError: Sync = ({ request, error }) => ({
   when: actions(
     [Requesting.request, { path: "/login" }, { request }],
-    [UserAuthentication.authenticate, {}, { error }],
+    [PasswordAuthentication.authenticate, {}, { error }],
   ),
   then: actions([Requesting.respond, { request, error }]),
 });
