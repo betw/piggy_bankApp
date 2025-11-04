@@ -25,15 +25,15 @@
  */
 
 export const inclusions: Record<string, string> = {
-  // Feel free to delete these example inclusions
-  "/api/PasswordAuthentication/register": "public can register",
-  "/api/PasswordAuthentication/authenticate":
-    "public can try to get authenticated",
+  // PasswordAuthentication
+  "/api/PasswordAuthentication/_getUserUsername": "",
+  "/api/PasswordAuthentication/_getAllUsers": "",
+
   "/api/Notification/createNotification": "",
   "/api/Notification/deleteNotification": "",
   "/api/Notification/_getAllNotifications": "",
   "/api/Notification/getNotificationMessageAndFreq": "",
-  "/api/PasswordAuthentication/_getUserUsername": "",
+
   "/api/ProgressTracking/createPlan": "",
   "/api/ProgressTracking/addAmount": "",
   "/api/ProgressTracking/removeAmount": "",
@@ -41,6 +41,7 @@ export const inclusions: Record<string, string> = {
   "/api/ProgressTracking/modifyPlan": "",
   "/api/ProgressTracking/updateGoalStatus": "",
   "/api/ProgressTracking/_getPlans": "",
+
   "/api/TripCostEstimation/_parseLLMCostEstimate": "",
   "/api/TripCostEstimation/createTravelPlan": "",
   "/api/TripCostEstimation/deleteTravelPlan": "",
@@ -53,7 +54,6 @@ export const inclusions: Record<string, string> = {
   "/api/TripCostEstimation/getTravelDates": "",
   "/api/TripCostEstimation/estimateCost": "",
   "/api/TripCostEstimation/_getAllTravelPlans": "",
-  "/api/PasswordAuthentication/_getAllUsers": "",
 };
 
 /**
@@ -66,4 +66,13 @@ export const inclusions: Record<string, string> = {
  * exclusions = ["route"]
  */
 
-export const exclusions: Array<string> = [];
+export const exclusions: Array<string> = [
+  // PasswordAuthentication
+  "/api/PasswordAuthentication/register",
+  "/api/PasswordAuthentication/authenticate",
+
+  // Sessioning
+  "/api/Sessioning/create",
+  "/api/Sessioning/delete",
+  "/api/Sessioning/_getUser",
+];

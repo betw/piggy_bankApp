@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "design/concepts/Notification/NotificationSpec.md",
+                "file": "design/concepts/Sessioning/implementation.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "NotificationSpec"
+              "title": "implementation"
             }
           }
         ]
@@ -171,6 +171,21 @@
   },
   "active": "72b263cfa3df1cde",
   "lastOpenFiles": [
+    "src/syncs/auth.sync.ts",
+    "src/concepts/Sessioning/SessioningConcept.ts",
+    "src/concepts/Sessioning",
+    "context/design/concepts/Sessioning/Sessioning.md/20251103_224754.4a04499d.md",
+    "context/design/concepts/Sessioning/Sessioning.md/steps/concept.76be7891.md",
+    "context/design/concepts/Sessioning/Sessioning.md/steps",
+    "context/design/concepts/Sessioning/Sessioning.md",
+    "context/design/concepts/Sessioning/implementation.md/20251103_224706.acce15b9.md",
+    "context/design/concepts/Sessioning/implementation.md/steps/_.cb75d2b4.md",
+    "context/design/concepts/Sessioning/implementation.md/steps/implement.a031f16c.md",
+    "context/design/concepts/Sessioning/implementation.md/steps",
+    "context/design/concepts/Sessioning/implementation.md",
+    "context/design/concepts/Sessioning",
+    "design/concepts/Sessioning/Sessioning.md",
+    "design/concepts/Notification/NotificationSpec.md",
     "deno.22db866a.tmp",
     "context/design/concepts/Notification/NotificationSpec.md/20251030_124737.7da696c4.md",
     "context/design/concepts/Notification/NotificationSpec.md/steps/response.96adb866.md",
@@ -189,23 +204,8 @@
     "deno.8410ee9a.tmp",
     "context/design/concepts/TripCostEstimation/TripCostEstimationSpec.md/20251029_183635.bc0edcec.md",
     "context/design/concepts/TripCostEstimation/TripCostEstimationSpec.md/steps/_.9cfb2460.md",
-    "context/design/concepts/TripCostEstimation/TripCostEstimationSpec.md/20251029_183615.d5df41a8.md",
-    "context/design/concepts/TripCostEstimation/TripCostEstimationSpec.md/steps/prompt.732e52a7.md",
-    "context/design/concepts/TripCostEstimation/TripCostEstimationSpec.md/steps/_.be473224.md",
-    "context/design/concepts/TripCostEstimation/TripCostEstimationSpec.md/20251029_183311.56c0e6c6.md",
-    "context/design/concepts/TripCostEstimation/TripCostEstimationSpec.md/steps/_.adb65cd7.md",
-    "context/design/concepts/TripCostEstimation/TripCostEstimationSpec.md/20251029_183257.a037ae5c.md",
-    "context/design/concepts/TripCostEstimation/TripCostEstimationSpec.md/steps/prompt.47f84726.md",
-    "context/design/concepts/TripCostEstimation/TripCostEstimationSpec.md/steps/_.baabcbd0.md",
-    "context/design/concepts/TripCostEstimation/TripCostEstimationSpec.md/20251029_181641.c503f53a.md",
     "ctx.exe",
     "ctx.exe.tmp-aeb79e91b7f9ae9d",
-    "context/design/concepts/TripCostEstimation/testing-output.md/steps",
-    "context/src/concepts/TripCostEstimation/TripCostEstimationConcept.ts",
-    "context/src/concepts/TripCostEstimation/TripCostEstimationConcept.test.ts",
-    "context/src/concepts/TripCostEstimation",
-    "context/design/concepts/TripCostEstimation/comparison-two-implementations.md/steps",
-    "context/design/concepts/TripCostEstimation/testing.md/steps",
-    "src/utils/gemini-llm.ts"
+    "context/design/concepts/TripCostEstimation/testing-output.md/steps"
   ]
 }
