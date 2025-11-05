@@ -43,7 +43,6 @@ export const inclusions: Record<string, string> = {
   "/api/ProgressTracking/_getPlans": "",
 
   "/api/TripCostEstimation/_parseLLMCostEstimate": "",
-  "/api/TripCostEstimation/createTravelPlan": "",
   "/api/TripCostEstimation/deleteTravelPlan": "",
   "/api/TripCostEstimation/updateNecessity": "",
   "/api/TripCostEstimation/resetNecessity": "",
@@ -67,6 +66,9 @@ export const inclusions: Record<string, string> = {
  */
 
 export const exclusions: Array<string> = [
+  // TripCostEstimation
+  "/api/TripCostEstimation/createTravelPlan",
+
   // PasswordAuthentication
   "/api/PasswordAuthentication/register",
   "/api/PasswordAuthentication/authenticate",
