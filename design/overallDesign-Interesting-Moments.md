@@ -114,4 +114,12 @@ that data other than the IDs returned
 by most of the actions of the concepts
 doesn't have to be stored solely in local storage or Pinia.
 
+# 9
+TripCostEstimation: The frontend calls the backend functions generateAICostimate or editCostEstimate then it calls estimateCost. When making synchronizations, I created
+a sync between actions of the same concept, e.g. "when: generateAICostEstimate then: estimateCost", since generateAICostEstimate calculates the daily costs associated with a trip
+and estimateCost the total cost over the total number of trip days. However, syncs are
+used for actions between different concepts. The approach I settled on is to have the frontend
+continue separately calling generateAICostEstimate/editCostEstimate and estimateCost, since
+this allows for trip costs on a daily basis to be displayed on the UI, if need be in the future. 
+
 

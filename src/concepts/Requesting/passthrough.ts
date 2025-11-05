@@ -29,8 +29,6 @@ export const inclusions: Record<string, string> = {
   "/api/PasswordAuthentication/_getUserUsername": "",
   "/api/PasswordAuthentication/_getAllUsers": "",
 
-  "/api/TripCostEstimation/estimateCost": "",
-
   "/api/Notification/createNotification": "",
   "/api/Notification/deleteNotification": "",
   "/api/Notification/_getAllNotifications": "",
@@ -66,6 +64,7 @@ export const exclusions: Array<string> = [
   "/api/TripCostEstimation/editEstimateCost",
   "/api/TripCostEstimation/deleteEstimateCost",
   "/api/TripCostEstimation/getTravelCities",
+  "/api/TripCostEstimation/estimateCost",
   "/api/TripCostEstimation/getTravelDates",
 
   // PasswordAuthentication

@@ -9,7 +9,6 @@ export const CreateTravelPlan: Sync = (
   when: actions([
     Requesting.request,
     {
-      user,
       session,
       path: "/TripCostEstimation/createTravelPlan",
       fromCity,
@@ -113,7 +112,6 @@ export const UpdateNecessity: Sync = (
   when: actions([
     Requesting.request,
     {
-      user,
       path: "/TripCostEstimation/updateNecessity",
       session,
       travelPlan,
@@ -133,7 +131,7 @@ export const UpdateNecessity: Sync = (
 });
 
 export const UpdateNecessityResponseSuccess: Sync = (
-  { request, user: _user, travelPlan, necessity },
+  { request, travelPlan, necessity },
 ) => ({
   when: actions(
     [Requesting.request, {
@@ -147,7 +145,7 @@ export const UpdateNecessityResponseSuccess: Sync = (
 });
 
 export const UpdateNecessityResponseError: Sync = (
-  { request, user: _user, error },
+  { request, error },
 ) => ({
   when: actions(
     [Requesting.request, {
@@ -202,6 +200,46 @@ export const ResetNecessityResponseError: Sync = (
       request,
     }],
     [TripCostEstimation.resetNecessity, {}, { error }],
+  ),
+  then: actions([Requesting.respond, { request, error }]),
+});
+
+// --- estimateCost (direct) ---
+export const EstimateCost: Sync = (
+  { request, session, user, travelPlan },
+) => ({
+  when: actions([
+    Requesting.request,
+    { path: "/TripCostEstimation/estimateCost", session, travelPlan },
+    { request },
+  ]),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
+  then: actions([TripCostEstimation.estimateCost, { user, travelPlan }]),
+});
+
+export const EstimateCostResponseSuccess: Sync = (
+  { request, totalCost },
+) => ({
+  when: actions(
+    [Requesting.request, { path: "/TripCostEstimation/estimateCost" }, {
+      request,
+    }],
+    [TripCostEstimation.estimateCost, {}, { totalCost }],
+  ),
+  then: actions([Requesting.respond, { request, totalCost }]),
+});
+
+export const EstimateCostResponseError: Sync = (
+  { request, error },
+) => ({
+  when: actions(
+    [Requesting.request, { path: "/TripCostEstimation/estimateCost" }, {
+      request,
+    }],
+    [TripCostEstimation.estimateCost, {}, { error }],
   ),
   then: actions([Requesting.respond, { request, error }]),
 });

@@ -169,8 +169,9 @@
       "bases:Create new base": false
     }
   },
-  "active": "72b263cfa3df1cde",
+  "active": "9b42b4503c7d88ad",
   "lastOpenFiles": [
+    "src/syncs/notify.sync.ts",
     "design/concepts/Sessioning/implementation.md",
     "src/syncs/auth.sync.ts",
     "src/concepts/Sessioning/SessioningConcept.ts",
@@ -204,7 +205,6 @@
     "design/concepts/TripCostEstimation/TripCostEstimationSpec.md",
     "deno.8410ee9a.tmp",
     "context/design/concepts/TripCostEstimation/TripCostEstimationSpec.md/20251029_183635.bc0edcec.md",
-    "context/design/concepts/TripCostEstimation/TripCostEstimationSpec.md/steps/_.9cfb2460.md",
     "ctx.exe",
     "ctx.exe.tmp-aeb79e91b7f9ae9d"
   ]
