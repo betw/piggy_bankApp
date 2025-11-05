@@ -1,10 +1,5 @@
 import { actions, Sync } from "@engine";
-import {
-  PasswordAuthentication,
-  Requesting,
-  Sessioning,
-  TripCostEstimation,
-} from "@concepts";
+import { Requesting, Sessioning, TripCostEstimation } from "@concepts";
 
 // When a client requests creating a travel plan and a valid session maps to a user,
 // call TripCostEstimation.createTravelPlan with the corresponding inputs.
@@ -392,38 +387,61 @@ export const GetTravelDatesResponseError: Sync = ({ request, error }) => ({
   then: actions([Requesting.respond, { request, error }]),
 });
 // --- _getAllTravelPlans ---
-export const GetAllTravelPlans: Sync = ({ request, session, user }) => ({
-  when: actions([
-    Requesting.request,
-    { path: "/TripCostEstimation/_getAllTravelPlans", session },
-    { request },
-  ]),
-  where: async (frames) => {
-    frames = await frames.query(Sessioning._getUser, { session }, { user });
-    return frames;
-  },
-  then: actions([TripCostEstimation._getAllTravelPlans, { user }]),
-});
-
+// NOTE: _getAllTravelPlans is a query (prefixed with `_`), so we invoke it in `where`
+// and only perform Requesting.respond in `then`.
 export const GetAllTravelPlansResponseSuccess: Sync = (
-  { request, travelPlans },
+  { request, session, user, travelPlans, error },
 ) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/_getAllTravelPlans" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/_getAllTravelPlans",
+      session,
+    }, {
       request,
     }],
-    [TripCostEstimation._getAllTravelPlans, {}, { travelPlans }],
   ),
+  where: async (frames) => {
+    // Authenticate session -> user
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    // Run the query to fetch plans; bind both shapes and filter to success frames
+    frames = await frames.query(
+      TripCostEstimation._getAllTravelPlans,
+      { user },
+      { travelPlans, error },
+    );
+    frames = frames.filter((f) =>
+      (f as Record<symbol, unknown>)[travelPlans] !== undefined
+    );
+    return frames;
+  },
   then: actions([Requesting.respond, { request, travelPlans }]),
 });
 
-export const GetAllTravelPlansResponseError: Sync = ({ request, error }) => ({
+export const GetAllTravelPlansResponseError: Sync = (
+  { request, session, user, travelPlans, error },
+) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/_getAllTravelPlans" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/_getAllTravelPlans",
+      session,
+    }, {
       request,
     }],
-    [TripCostEstimation._getAllTravelPlans, {}, { error }],
   ),
+  where: async (frames) => {
+    // Authenticate session -> user
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    // Run the query to fetch plans and filter to error frames
+    frames = await frames.query(
+      TripCostEstimation._getAllTravelPlans,
+      { user },
+      { travelPlans, error },
+    );
+    frames = frames.filter((f) =>
+      (f as Record<symbol, unknown>)[error] !== undefined
+    );
+    return frames;
+  },
   then: actions([Requesting.respond, { request, error }]),
 });
 
