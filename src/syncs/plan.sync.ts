@@ -258,16 +258,21 @@ export const GenerateAICostEstimate: Sync = (
   }]),
 });
 
-// Respond only after auto-estimate has computed total cost
-export const GenerateAICostEstimateAutoEstimateResponseSuccess: Sync = (
-  { request, session, user, travelPlan, costEstimate, totalCost },
+// Chain: after AI estimate is created, compute total cost
+export const GenerateAICostEstimateAutoEstimate: Sync = (
+  { user, travelPlan },
 ) => ({
   when: actions(
-    [
-      Requesting.request,
-      { path: "/TripCostEstimation/generateAICostEstimate", session },
-      { request },
-    ],
+    [TripCostEstimation.generateAICostEstimate, { user, travelPlan }],
+  ),
+  then: actions([TripCostEstimation.estimateCost, { user, travelPlan }]),
+});
+
+// Respond only after auto-estimate has computed total cost
+export const GenerateAICostEstimateAutoEstimateResponseSuccess: Sync = (
+  { request, user, travelPlan, costEstimate, totalCost },
+) => ({
+  when: actions(
     // The AI estimate must have been created for this user/plan
     [TripCostEstimation.generateAICostEstimate, { user, travelPlan }, {
       costEstimate,
@@ -275,10 +280,6 @@ export const GenerateAICostEstimateAutoEstimateResponseSuccess: Sync = (
     // And the chained total estimate must have completed
     [TripCostEstimation.estimateCost, { user, travelPlan }, { totalCost }],
   ),
-  where: async (frames) => {
-    frames = await frames.query(Sessioning._getUser, { session }, { user });
-    return frames;
-  },
   then: actions([Requesting.respond, { request, costEstimate, totalCost }]),
 });
 
@@ -344,6 +345,14 @@ export const EditEstimateCost: Sync = (
     TripCostEstimation.editEstimateCost,
     { user, travelPlan, flight, roomsPerNight, foodDaily },
   ]),
+});
+
+// Chain: after manual edit, compute total cost
+export const EditEstimateCostAutoEstimate: Sync = ({ user, travelPlan }) => ({
+  when: actions(
+    [TripCostEstimation.editEstimateCost, { user, travelPlan }],
+  ),
+  then: actions([TripCostEstimation.estimateCost, { user, travelPlan }]),
 });
 
 // Respond only after auto-estimate has computed total cost
@@ -632,21 +641,4 @@ export const GetAllTravelPlansResponseError: Sync = (
     return frames;
   },
   then: actions([Requesting.respond, { request, error }]),
-});
-
-// --- Chain edits/AI estimate to compute total cost automatically ---
-export const EditEstimateCostAutoEstimate: Sync = ({ user, travelPlan }) => ({
-  when: actions(
-    [TripCostEstimation.editEstimateCost, { user, travelPlan }],
-  ),
-  then: actions([TripCostEstimation.estimateCost, { user, travelPlan }]),
-});
-
-export const GenerateAICostEstimateAutoEstimate: Sync = (
-  { user, travelPlan },
-) => ({
-  when: actions(
-    [TripCostEstimation.generateAICostEstimate, { user, travelPlan }],
-  ),
-  then: actions([TripCostEstimation.estimateCost, { user, travelPlan }]),
 });
