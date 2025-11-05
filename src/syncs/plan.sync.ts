@@ -31,25 +31,41 @@ export const CreateTravelPlan: Sync = (
 
 // Respond with the created travelPlan on success
 export const CreateTravelPlanResponseSuccess: Sync = (
-  { request, travelPlan },
+  { request, session, user, travelPlan },
 ) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/createTravelPlan" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/createTravelPlan",
+      session,
+    }, {
       request,
     }],
     [TripCostEstimation.createTravelPlan, {}, { travelPlan }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, travelPlan }]),
 });
 
 // Respond with error when createTravelPlan fails
-export const CreateTravelPlanResponseError: Sync = ({ request, error }) => ({
+export const CreateTravelPlanResponseError: Sync = (
+  { request, session, user, error },
+) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/createTravelPlan" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/createTravelPlan",
+      session,
+    }, {
       request,
     }],
     [TripCostEstimation.createTravelPlan, {}, { error }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, error }]),
 });
 // --- deleteTravelPlan ---
@@ -69,24 +85,40 @@ export const DeleteTravelPlan: Sync = (
 });
 
 export const DeleteTravelPlanResponseSuccess: Sync = (
-  { request, travelPlan },
+  { request, session, user, travelPlan },
 ) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/deleteTravelPlan" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/deleteTravelPlan",
+      session,
+    }, {
       request,
     }],
     [TripCostEstimation.deleteTravelPlan, {}, { travelPlan }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, travelPlan }]),
 });
 
-export const DeleteTravelPlanResponseError: Sync = ({ request, error }) => ({
+export const DeleteTravelPlanResponseError: Sync = (
+  { request, session, user, error },
+) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/deleteTravelPlan" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/deleteTravelPlan",
+      session,
+    }, {
       request,
     }],
     [TripCostEstimation.deleteTravelPlan, {}, { error }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, error }]),
 });
 
@@ -116,24 +148,40 @@ export const UpdateNecessity: Sync = (
 });
 
 export const UpdateNecessityResponseSuccess: Sync = (
-  { request, travelPlan, necessity },
+  { request, session, user, travelPlan, necessity },
 ) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/updateNecessity" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/updateNecessity",
+      session,
+    }, {
       request,
     }],
     [TripCostEstimation.updateNecessity, {}, { travelPlan, necessity }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, travelPlan, necessity }]),
 });
 
-export const UpdateNecessityResponseError: Sync = ({ request, error }) => ({
+export const UpdateNecessityResponseError: Sync = (
+  { request, session, user, error },
+) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/updateNecessity" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/updateNecessity",
+      session,
+    }, {
       request,
     }],
     [TripCostEstimation.updateNecessity, {}, { error }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, error }]),
 });
 
@@ -154,24 +202,40 @@ export const ResetNecessity: Sync = (
 });
 
 export const ResetNecessityResponseSuccess: Sync = (
-  { request, necessity },
+  { request, session, user, necessity },
 ) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/resetNecessity" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/resetNecessity",
+      session,
+    }, {
       request,
     }],
     [TripCostEstimation.resetNecessity, {}, { necessity }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, necessity }]),
 });
 
-export const ResetNecessityResponseError: Sync = ({ request, error }) => ({
+export const ResetNecessityResponseError: Sync = (
+  { request, session, user, error },
+) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/resetNecessity" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/resetNecessity",
+      session,
+    }, {
       request,
     }],
     [TripCostEstimation.resetNecessity, {}, { error }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, error }]),
 });
 
@@ -194,31 +258,65 @@ export const GenerateAICostEstimate: Sync = (
   }]),
 });
 
-export const GenerateAICostEstimateResponseSuccess: Sync = (
-  { request, costEstimate },
+// Respond only after auto-estimate has computed total cost
+export const GenerateAICostEstimateAutoEstimateResponseSuccess: Sync = (
+  { request, session, user, travelPlan, costEstimate, totalCost },
 ) => ({
   when: actions(
     [
       Requesting.request,
-      { path: "/TripCostEstimation/generateAICostEstimate" },
+      { path: "/TripCostEstimation/generateAICostEstimate", session },
       { request },
     ],
-    [TripCostEstimation.generateAICostEstimate, {}, { costEstimate }],
+    // The AI estimate must have been created for this user/plan
+    [TripCostEstimation.generateAICostEstimate, { user, travelPlan }, {
+      costEstimate,
+    }],
+    // And the chained total estimate must have completed
+    [TripCostEstimation.estimateCost, { user, travelPlan }, { totalCost }],
   ),
-  then: actions([Requesting.respond, { request, costEstimate }]),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
+  then: actions([Requesting.respond, { request, costEstimate, totalCost }]),
+});
+
+// If the chained total estimate fails, surface that error
+export const GenerateAICostEstimateAutoEstimateResponseError: Sync = (
+  { request, session, user, travelPlan, error },
+) => ({
+  when: actions(
+    [
+      Requesting.request,
+      { path: "/TripCostEstimation/generateAICostEstimate", session },
+      { request },
+    ],
+    [TripCostEstimation.generateAICostEstimate, { user, travelPlan }, {}],
+    [TripCostEstimation.estimateCost, { user, travelPlan }, { error }],
+  ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
+  then: actions([Requesting.respond, { request, error }]),
 });
 
 export const GenerateAICostEstimateResponseError: Sync = (
-  { request, error },
+  { request, session, user, error },
 ) => ({
   when: actions(
     [
       Requesting.request,
-      { path: "/TripCostEstimation/generateAICostEstimate" },
+      { path: "/TripCostEstimation/generateAICostEstimate", session },
       { request },
     ],
     [TripCostEstimation.generateAICostEstimate, {}, { error }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, error }]),
 });
 
@@ -248,25 +346,68 @@ export const EditEstimateCost: Sync = (
   ]),
 });
 
-export const EditEstimateCostResponseSuccess: Sync = (
-  { request, costEstimate },
+// Respond only after auto-estimate has computed total cost
+export const EditEstimateCostAutoEstimateResponseSuccess: Sync = (
+  { request, session, user, travelPlan, costEstimate, totalCost },
 ) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/editEstimateCost" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/editEstimateCost",
+      session,
+    }, {
       request,
     }],
-    [TripCostEstimation.editEstimateCost, {}, { costEstimate }],
+    // The edit must have been applied for this user/plan
+    [TripCostEstimation.editEstimateCost, { user, travelPlan }, {
+      costEstimate,
+    }],
+    // And the chained total estimate must have completed
+    [TripCostEstimation.estimateCost, { user, travelPlan }, { totalCost }],
   ),
-  then: actions([Requesting.respond, { request, costEstimate }]),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
+  then: actions([Requesting.respond, { request, costEstimate, totalCost }]),
 });
 
-export const EditEstimateCostResponseError: Sync = ({ request, error }) => ({
+// If the chained total estimate fails, surface that error
+export const EditEstimateCostAutoEstimateResponseError: Sync = (
+  { request, session, user, travelPlan, error },
+) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/editEstimateCost" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/editEstimateCost",
+      session,
+    }, {
+      request,
+    }],
+    [TripCostEstimation.editEstimateCost, { user, travelPlan }, {}],
+    [TripCostEstimation.estimateCost, { user, travelPlan }, { error }],
+  ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
+  then: actions([Requesting.respond, { request, error }]),
+});
+
+export const EditEstimateCostResponseError: Sync = (
+  { request, session, user, error },
+) => ({
+  when: actions(
+    [Requesting.request, {
+      path: "/TripCostEstimation/editEstimateCost",
+      session,
+    }, {
       request,
     }],
     [TripCostEstimation.editEstimateCost, {}, { error }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, error }]),
 });
 
@@ -290,24 +431,40 @@ export const DeleteEstimateCost: Sync = (
 });
 
 export const DeleteEstimateCostResponseSuccess: Sync = (
-  { request, costEstimate },
+  { request, session, user, costEstimate },
 ) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/deleteEstimateCost" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/deleteEstimateCost",
+      session,
+    }, {
       request,
     }],
     [TripCostEstimation.deleteEstimateCost, {}, { costEstimate }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, costEstimate }]),
 });
 
-export const DeleteEstimateCostResponseError: Sync = ({ request, error }) => ({
+export const DeleteEstimateCostResponseError: Sync = (
+  { request, session, user, error },
+) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/deleteEstimateCost" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/deleteEstimateCost",
+      session,
+    }, {
       request,
     }],
     [TripCostEstimation.deleteEstimateCost, {}, { error }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, error }]),
 });
 
@@ -328,24 +485,40 @@ export const GetTravelCities: Sync = (
 });
 
 export const GetTravelCitiesResponseSuccess: Sync = (
-  { request, fromCity, toCity },
+  { request, session, user, fromCity, toCity },
 ) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/getTravelCities" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/getTravelCities",
+      session,
+    }, {
       request,
     }],
     [TripCostEstimation.getTravelCities, {}, { fromCity, toCity }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, fromCity, toCity }]),
 });
 
-export const GetTravelCitiesResponseError: Sync = ({ request, error }) => ({
+export const GetTravelCitiesResponseError: Sync = (
+  { request, session, user, error },
+) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/getTravelCities" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/getTravelCities",
+      session,
+    }, {
       request,
     }],
     [TripCostEstimation.getTravelCities, {}, { error }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, error }]),
 });
 
@@ -366,24 +539,40 @@ export const GetTravelDates: Sync = (
 });
 
 export const GetTravelDatesResponseSuccess: Sync = (
-  { request, fromDate, toDate },
+  { request, session, user, fromDate, toDate },
 ) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/getTravelDates" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/getTravelDates",
+      session,
+    }, {
       request,
     }],
     [TripCostEstimation.getTravelDates, {}, { fromDate, toDate }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, fromDate, toDate }]),
 });
 
-export const GetTravelDatesResponseError: Sync = ({ request, error }) => ({
+export const GetTravelDatesResponseError: Sync = (
+  { request, session, user, error },
+) => ({
   when: actions(
-    [Requesting.request, { path: "/TripCostEstimation/getTravelDates" }, {
+    [Requesting.request, {
+      path: "/TripCostEstimation/getTravelDates",
+      session,
+    }, {
       request,
     }],
     [TripCostEstimation.getTravelDates, {}, { error }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, error }]),
 });
 // --- _getAllTravelPlans ---
