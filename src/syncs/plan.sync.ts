@@ -132,12 +132,11 @@ export const UpdateNecessity: Sync = (
 });
 
 export const UpdateNecessityResponseSuccess: Sync = (
-  { request, session, user: _user, travelPlan, necessity },
+  { request, user: _user, travelPlan, necessity },
 ) => ({
   when: actions(
     [Requesting.request, {
       path: "/TripCostEstimation/updateNecessity",
-      session,
     }, {
       request,
     }],
@@ -147,12 +146,11 @@ export const UpdateNecessityResponseSuccess: Sync = (
 });
 
 export const UpdateNecessityResponseError: Sync = (
-  { request, session, user: _user, error },
+  { request, user: _user, error },
 ) => ({
   when: actions(
     [Requesting.request, {
       path: "/TripCostEstimation/updateNecessity",
-      session,
     }, {
       request,
     }],
