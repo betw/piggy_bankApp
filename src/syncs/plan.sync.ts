@@ -113,6 +113,7 @@ export const UpdateNecessity: Sync = (
   when: actions([
     Requesting.request,
     {
+      user,
       path: "/TripCostEstimation/updateNecessity",
       session,
       travelPlan,
