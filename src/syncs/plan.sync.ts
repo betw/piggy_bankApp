@@ -285,21 +285,12 @@ export const GenerateAICostEstimateAutoEstimateResponseSuccess: Sync = (
 
 // If the chained total estimate fails, surface that error
 export const GenerateAICostEstimateAutoEstimateResponseError: Sync = (
-  { request, session, user, travelPlan, error },
+  { request, user, travelPlan, error },
 ) => ({
   when: actions(
-    [
-      Requesting.request,
-      { path: "/TripCostEstimation/generateAICostEstimate", session },
-      { request },
-    ],
     [TripCostEstimation.generateAICostEstimate, { user, travelPlan }, {}],
     [TripCostEstimation.estimateCost, { user, travelPlan }, { error }],
   ),
-  where: async (frames) => {
-    frames = await frames.query(Sessioning._getUser, { session }, { user });
-    return frames;
-  },
   then: actions([Requesting.respond, { request, error }]),
 });
 
