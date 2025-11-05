@@ -108,19 +108,23 @@ export const DeleteTravelPlanResponseError: Sync = (
 
 // --- updateNecessity ---
 export const UpdateNecessity: Sync = (
-  { request, user, travelPlan, accommodation, diningFlag },
+  { request, session, user, travelPlan, accommodation, diningFlag },
 ) => ({
   when: actions([
     Requesting.request,
     {
       path: "/TripCostEstimation/updateNecessity",
-      user,
+      session,
       travelPlan,
       accommodation,
       diningFlag,
     },
     { request },
   ]),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([
     TripCostEstimation.updateNecessity,
     { user, travelPlan, accommodation, diningFlag },
