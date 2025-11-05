@@ -269,10 +269,15 @@ export const GenerateAICostEstimateAutoEstimate: Sync = (
 });
 
 // Respond only after auto-estimate has computed total cost
-export const GenerateAICostEstimateAutoEstimateResponseSuccess: Sync = (
-  { request, user, travelPlan, costEstimate, totalCost },
+export const GenerateAICostEstimateResponseSuccess: Sync = (
+  { request, session, user, travelPlan, costEstimate, totalCost },
 ) => ({
   when: actions(
+    [
+      Requesting.request,
+      { path: "/TripCostEstimation/generateAICostEstimate", session },
+      { request },
+    ],
     // The AI estimate must have been created for this user/plan
     [TripCostEstimation.generateAICostEstimate, { user, travelPlan }, {
       costEstimate,
@@ -280,18 +285,11 @@ export const GenerateAICostEstimateAutoEstimateResponseSuccess: Sync = (
     // And the chained total estimate must have completed
     [TripCostEstimation.estimateCost, { user, travelPlan }, { totalCost }],
   ),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
   then: actions([Requesting.respond, { request, costEstimate, totalCost }]),
-});
-
-// If the chained total estimate fails, surface that error
-export const GenerateAICostEstimateAutoEstimateResponseError: Sync = (
-  { request, user, travelPlan, error },
-) => ({
-  when: actions(
-    [TripCostEstimation.generateAICostEstimate, { user, travelPlan }, {}],
-    [TripCostEstimation.estimateCost, { user, travelPlan }, { error }],
-  ),
-  then: actions([Requesting.respond, { request, error }]),
 });
 
 export const GenerateAICostEstimateResponseError: Sync = (
