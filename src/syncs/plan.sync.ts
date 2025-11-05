@@ -193,7 +193,7 @@ export const ResetNecessityResponseSuccess: Sync = (
 });
 
 export const ResetNecessityResponseError: Sync = (
-  { request, session, user, error },
+  { request, session, user: _user, error },
 ) => ({
   when: actions(
     [Requesting.request, {
@@ -227,18 +227,18 @@ export const GenerateAICostEstimate: Sync = (
 });
 
 // Chain: after AI estimate is created, compute total cost
-export const GenerateAICostEstimateAutoEstimate: Sync = (
-  { user, travelPlan },
-) => ({
-  when: actions(
-    [TripCostEstimation.generateAICostEstimate, { user, travelPlan }],
-  ),
-  then: actions([TripCostEstimation.estimateCost, { user, travelPlan }]),
-});
+// export const GenerateAICostEstimateAutoEstimate: Sync = (
+//   { user, travelPlan },
+// ) => ({
+//   when: actions(
+//     [TripCostEstimation.generateAICostEstimate, { user, travelPlan }],
+//   ),
+//   then: actions([TripCostEstimation.estimateCost, { user, travelPlan }]),
+// });
 
 // Respond only after auto-estimate has computed total cost
 export const GenerateAICostEstimateResponseSuccess: Sync = (
-  { request, session, user, travelPlan, costEstimate, totalCost },
+  { request, session, user, travelPlan, costEstimate },
 ) => ({
   when: actions(
     [
@@ -250,10 +250,8 @@ export const GenerateAICostEstimateResponseSuccess: Sync = (
     [TripCostEstimation.generateAICostEstimate, { user, travelPlan }, {
       costEstimate,
     }],
-    // And the chained total estimate must have completed
-    [TripCostEstimation.estimateCost, { user, travelPlan }, { totalCost }],
   ),
-  then: actions([Requesting.respond, { request, costEstimate, totalCost }]),
+  then: actions([Requesting.respond, { request, costEstimate }]),
 });
 
 export const GenerateAICostEstimateResponseError: Sync = (
@@ -297,16 +295,16 @@ export const EditEstimateCost: Sync = (
 });
 
 // Chain: after manual edit, compute total cost
-export const EditEstimateCostAutoEstimate: Sync = ({ user, travelPlan }) => ({
-  when: actions(
-    [TripCostEstimation.editEstimateCost, { user, travelPlan }],
-  ),
-  then: actions([TripCostEstimation.estimateCost, { user, travelPlan }]),
-});
+// export const EditEstimateCostAutoEstimate: Sync = ({ user, travelPlan }) => ({
+//   when: actions(
+//     [TripCostEstimation.editEstimateCost, { user, travelPlan }],
+//   ),
+//   then: actions([TripCostEstimation.estimateCost, { user, travelPlan }]),
+// });
 
 // Respond only after auto-estimate has computed total cost
 export const EditEstimateCostAutoEstimateResponseSuccess: Sync = (
-  { request, session, user, travelPlan, costEstimate, totalCost },
+  { request, session, user, travelPlan, costEstimate },
 ) => ({
   when: actions(
     [Requesting.request, {
@@ -319,31 +317,29 @@ export const EditEstimateCostAutoEstimateResponseSuccess: Sync = (
     [TripCostEstimation.editEstimateCost, { user, travelPlan }, {
       costEstimate,
     }],
-    // And the chained total estimate must have completed
-    [TripCostEstimation.estimateCost, { user, travelPlan }, { totalCost }],
   ),
-  then: actions([Requesting.respond, { request, costEstimate, totalCost }]),
+  then: actions([Requesting.respond, { request, costEstimate }]),
 });
 
 // If the chained total estimate fails, surface that error
-export const EditEstimateCostAutoEstimateResponseError: Sync = (
-  { request, session, user, travelPlan, error },
-) => ({
-  when: actions(
-    [Requesting.request, {
-      path: "/TripCostEstimation/editEstimateCost",
-      session,
-    }, {
-      request,
-    }],
-    [TripCostEstimation.editEstimateCost, { user, travelPlan }, {}],
-    [TripCostEstimation.estimateCost, { user, travelPlan }, { error }],
-  ),
-  then: actions([Requesting.respond, { request, error }]),
-});
+// export const EditEstimateCostAutoEstimateResponseError: Sync = (
+//   { request, session, user, travelPlan, error },
+// ) => ({
+//   when: actions(
+//     [Requesting.request, {
+//       path: "/TripCostEstimation/editEstimateCost",
+//       session,
+//     }, {
+//       request,
+//     }],
+//     [TripCostEstimation.editEstimateCost, { user, travelPlan }, {}],
+//     [TripCostEstimation.estimateCost, { user, travelPlan }, { error }],
+//   ),
+//   then: actions([Requesting.respond, { request, error }]),
+// });
 
 export const EditEstimateCostResponseError: Sync = (
-  { request, session, user: _user, error },
+  { request, session, error },
 ) => ({
   when: actions(
     [Requesting.request, {
@@ -377,7 +373,7 @@ export const DeleteEstimateCost: Sync = (
 });
 
 export const DeleteEstimateCostResponseSuccess: Sync = (
-  { request, session, user: _user, costEstimate },
+  { request, session, costEstimate },
 ) => ({
   when: actions(
     [Requesting.request, {
