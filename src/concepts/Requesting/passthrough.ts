@@ -41,18 +41,6 @@ export const inclusions: Record<string, string> = {
   "/api/ProgressTracking/modifyPlan": "",
   "/api/ProgressTracking/updateGoalStatus": "",
   "/api/ProgressTracking/_getPlans": "",
-
-  "/api/TripCostEstimation/_parseLLMCostEstimate": "",
-  "/api/TripCostEstimation/deleteTravelPlan": "",
-  "/api/TripCostEstimation/updateNecessity": "",
-  "/api/TripCostEstimation/resetNecessity": "",
-  "/api/TripCostEstimation/generateAICostEstimate": "",
-  "/api/TripCostEstimation/editEstimateCost": "",
-  "/api/TripCostEstimation/deleteEstimateCost": "",
-  "/api/TripCostEstimation/getTravelCities": "",
-  "/api/TripCostEstimation/getTravelDates": "",
-  "/api/TripCostEstimation/estimateCost": "",
-  "/api/TripCostEstimation/_getAllTravelPlans": "",
 };
 
 /**
@@ -68,6 +56,16 @@ export const inclusions: Record<string, string> = {
 export const exclusions: Array<string> = [
   // TripCostEstimation
   "/api/TripCostEstimation/createTravelPlan",
+  "/api/TripCostEstimation/_getAllTravelPlans",
+  "/api/TripCostEstimation/deleteTravelPlan",
+  "/api/TripCostEstimation/updateNecessity",
+  "/api/TripCostEstimation/resetNecessity",
+  "/api/TripCostEstimation/generateAICostEstimate",
+  "/api/TripCostEstimation/editEstimateCost",
+  "/api/TripCostEstimation/deleteEstimateCost",
+  "/api/TripCostEstimation/getTravelCities",
+  "/api/TripCostEstimation/getTravelDates",
+  "/api/TripCostEstimation/estimateCost",
 
   // PasswordAuthentication
   "/api/PasswordAuthentication/register",
