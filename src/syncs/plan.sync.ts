@@ -121,10 +121,10 @@ export const UpdateNecessity: Sync = (
     },
     { request },
   ]),
-  where: async (frames) => {
-    frames = await frames.query(Sessioning._getUser, { session }, { user });
-    return frames;
-  },
+  // where: async (frames) => {
+  //   frames = await frames.query(Sessioning._getUser, { session }, { user });
+  //   return frames;
+  // },
   then: actions([
     TripCostEstimation.updateNecessity,
     { user, travelPlan, accommodation, diningFlag },
