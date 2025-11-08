@@ -1,3 +1,5 @@
+I've formatted your log data into a single code block using plain Markdown, which is ideal for displaying code or log output:
+
 [Requesting] Received request for path: /ProgressTracking/createPlan
 Requesting.request {
   trip: '019a6128-638f-79ab-aaa9-48c9d6438e1d',
