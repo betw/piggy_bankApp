@@ -15,9 +15,9 @@ This document summarizes how the final Piggy Bank design evolved from the initia
 - Early concepts returned rich objects (risk of leaking internal structure).
 - Final approach: Queries return only IDs (Notification `_getAllNotifications`, ProgressTracking `_getPlans`, TripCostEstimation `_getAllTravelPlans`).
 - Snapshot references:
-	- Notification restructuring: [20251015_203844.06aca8e2](../context/design/concepts/Notification/testing.md/20251015_203844.06aca8e2.md)
-	- ProgressTracking query correction: [20251015_224640.92baf8e4](../context/design/concepts/ProgressTracking/implementation.md/20251015_224640.92baf8e4.md), [20251016_095310.3a9e2088](../context/design/concepts/ProgressTracking/ProgressTrackingSpec.md/20251016_095310.3a9e2088.md)
-	- TripCostEstimation projection & ID returns: [20251016_133650.417c74c9](../context/design/concepts/TripCostEstimation/comparison-two-implementations.md/20251016_133650.417c74c9.md)
+	- Notification restructuring: [20251015_203844.06aca8e2](../../context/design/concepts/Notification/testing.md/20251015_203844.06aca8e2.md)
+	- ProgressTracking query correction: [20251015_224640.92baf8e4](../../context/design/concepts/ProgressTracking/implementation.md/20251015_224640.92baf8e4.md), [20251016_095310.3a9e2088](../../context/design/concepts/ProgressTracking/ProgressTrackingSpec.md/20251016_095310.3a9e2088.md)
+	- TripCostEstimation projection & ID returns: [20251016_133650.417c74c9](../../context/design/concepts/TripCostEstimation/comparison-two-implementations.md/20251016_133650.417c74c9.md)
 - Benefit: Test isolation, modularity, minimized coupling, cleaner frontend normalization.
 
 ## 3. Notification System Changes
@@ -45,16 +45,16 @@ This document summarizes how the final Piggy Bank design evolved from the initia
 
 - Early approach: Highly prescriptive prompt design (tool instructions, verbose constraints).
 - Final approach:
-	- Outcome-focused prompt specifying required JSON schema only ([20251016_133650.417c74c9](../context/design/concepts/TripCostEstimation/comparison-two-implementations.md/20251016_133650.417c74c9.md)).
+	- Outcome-focused prompt specifying required JSON schema only ([20251016_133650.417c74c9](../../context/design/concepts/TripCostEstimation/comparison-two-implementations.md/20251016_133650.417c74c9.md)).
 	- Simplified parsing: Basic structural checks rather than layered semantic validation.
 - Reasoning: Reliability improved; reduced maintenance overhead.
 - Design decision: Did not validate city existence server-side—delegated feasibility to LLM (design note #7).
 
 ## 6. Testing & Architecture Improvements
 
-- Test isolation: Each scenario uses fresh database/context ([20251015_203844.06aca8e2](../context/design/concepts/Notification/testing.md/20251015_203844.06aca8e2.md)).
+- Test isolation: Each scenario uses fresh database/context ([20251015_203844.06aca8e2](../../context/design/concepts/Notification/testing.md/20251015_203844.06aca8e2.md)).
 - Representation independence enforced across concepts (IDs only).
-- Action return signatures refined to confirm effects without exposing internal docs (ProgressTracking spec refinement [20251016_095310.3a9e2088](../context/design/concepts/ProgressTracking/ProgressTrackingSpec.md/20251016_095310.3a9e2088.md)).
+- Action return signatures refined to confirm effects without exposing internal docs (ProgressTracking spec refinement [20251016_095310.3a9e2088](../../context/design/concepts/ProgressTracking/ProgressTrackingSpec.md/20251016_095310.3a9e2088.md)).
 - Error handling hardened (unknown → guarded extraction).
 
 ## 7. API Surface Consolidation
@@ -105,11 +105,11 @@ This document summarizes how the final Piggy Bank design evolved from the initia
 
 ## Snapshot References (Immutable Moments)
 
-- Notification concept restructuring: [20251015_203844.06aca8e2](../context/design/concepts/Notification/testing.md/20251015_203844.06aca8e2.md)
-- PasswordAuthentication constraints & inconsistency: [20251015_220736.ead8cc82](../context/src/concepts/PasswordAuthentication/PasswordAuthenticationConcept.test.ts/20251015_220736.ead8cc82.md)
-- ProgressTracking implementation + spec refinement: [20251015_224640.92baf8e4](../context/design/concepts/ProgressTracking/implementation.md/20251015_224640.92baf8e4.md) / [20251016_095310.3a9e2088](../context/design/concepts/ProgressTracking/ProgressTrackingSpec.md/20251016_095310.3a9e2088.md)
-- TripCostEstimation LLM prompt evolution: [20251016_133650.417c74c9](../context/design/concepts/TripCostEstimation/comparison-two-implementations.md/20251016_133650.417c74c9.md)
-- Parsing reliability test (LLM variability): [20251017_184647.70888acc](../context/src/concepts/TripCostEstimation/TripCostEstimationConcept.test.ts/20251017_184647.70888acc.md)
+- Notification concept restructuring: [20251015_203844.06aca8e2](../../context/design/concepts/Notification/testing.md/20251015_203844.06aca8e2.md)
+- PasswordAuthentication constraints & inconsistency: [20251015_220736.ead8cc82](../../context/src/concepts/PasswordAuthentication/PasswordAuthenticationConcept.test.ts/20251015_220736.ead8cc82.md)
+- ProgressTracking implementation + spec refinement: [20251015_224640.92baf8e4](../../context/design/concepts/ProgressTracking/implementation.md/20251015_224640.92baf8e4.md) / [20251016_095310.3a9e2088](../../context/design/concepts/ProgressTracking/ProgressTrackingSpec.md/20251016_095310.3a9e2088.md)
+- TripCostEstimation LLM prompt evolution: [20251016_133650.417c74c9](../../context/design/concepts/TripCostEstimation/comparison-two-implementations.md/20251016_133650.417c74c9.md)
+- Parsing reliability test (LLM variability): [20251017_184647.70888acc](../../context/src/concepts/TripCostEstimation/TripCostEstimationConcept.test.ts/20251017_184647.70888acc.md)
 
 ## Final Summary (At a Glance)
 
