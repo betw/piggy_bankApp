@@ -12,7 +12,7 @@ This document summarizes how the final Piggy Bank design evolved from the initia
 
 ## 2. Representation Independence & Query Discipline
 
-- Early concepts returned rich objects (risk of leaking internal structure).
+- Early concepts written by LLM returned rich objects (risk of leaking internal structure).
 - Final approach: Queries return only IDs (Notification `_getAllNotifications`, ProgressTracking `_getPlans`, TripCostEstimation `_getAllTravelPlans`).
 - Snapshot references:
 	- Notification restructuring: [20251015_203844.06aca8e2](../../context/design/concepts/Notification/testing.md/20251015_203844.06aca8e2.md)
@@ -25,21 +25,16 @@ This document summarizes how the final Piggy Bank design evolved from the initia
 - Initial concept: Basic create/delete with user ownership.
 - Final design additions:
 	- Savings reminder notifications are manually created after plan creation (backend doesn’t auto-create).
-	- Milestone notifications (halfway, goal complete) added—frequency line suppressed for these.
-	- Local preservation logic when backend returns empty (avoids data loss).
-	- Dropped “Necessity” label in cards for cleaner UI.
-	- Removed frequency display for milestone types for clarity.
-- Technical refinements: Synthetic/local vs fetched sets merged safely; removal of redundant field probing; session-only payloads.
+    - Initially, I implemented sync so that when progressTracking.createPlan was called for a user session, a notification was created and a response sync was sent. However, since the frontend “Notifications” page displays more information than the backend provides, it was more effective to handle notification creation in the frontend, allowing necessary data to flow between Vue components.
+	
 
 ## 4. ProgressTracking Evolution
 
 - Initial: Pure savings logic tied to user explicitly.
 - Final:
-	- Plan creation response simplified—trusts `{ plan }` ID (removed multi-key fallback chains).
-	- Notification creation synchronized manually post-plan creation (see synchronization rationale divergence from original implicit expectations).
+	- Removed redundant LLM checks for backend parameters (.planID, .planId, .plan_id). GPT-5 exhibited this issue, but Claude Sonnet 4.5, with the proper API spec context, resolved the redundancy
+	- Notification creation synchronized manually post-plan creation.
 	- Added milestone detection logic (halfway, goal completion) with explicit triggers.
-	- Reduced defensive ID parsing to spec-based single-field extraction.
-- Lesson: Overly defensive normalization replaced with spec-grounded minimal parsing for maintainability.
 
 ## 5. TripCostEstimation & LLM Integration
 
@@ -48,11 +43,9 @@ This document summarizes how the final Piggy Bank design evolved from the initia
 	- Outcome-focused prompt specifying required JSON schema only ([20251016_133650.417c74c9](../../context/design/concepts/TripCostEstimation/comparison-two-implementations.md/20251016_133650.417c74c9.md)).
 	- Simplified parsing: Basic structural checks rather than layered semantic validation.
 - Reasoning: Reliability improved; reduced maintenance overhead.
-- Design decision: Did not validate city existence server-side—delegated feasibility to LLM (design note #7).
+- Design decision: Did not validate city existence server-side—delegated feasibility to LLM, but this provided the benefit of not having to store in a text file or database a list of most cities in the world (design note #7).
 
 ## 6. Testing & Architecture Improvements
-
-- Test isolation: Each scenario uses fresh database/context ([20251015_203844.06aca8e2](../../context/design/concepts/Notification/testing.md/20251015_203844.06aca8e2.md)).
 - Representation independence enforced across concepts (IDs only).
 - Action return signatures refined to confirm effects without exposing internal docs (ProgressTracking spec refinement [20251016_095310.3a9e2088](../../context/design/concepts/ProgressTracking/ProgressTrackingSpec.md/20251016_095310.3a9e2088.md)).
 - Error handling hardened (unknown → guarded extraction).
@@ -60,9 +53,7 @@ This document summarizes how the final Piggy Bank design evolved from the initia
 ## 7. API Surface Consolidation
 
 - Removed polymorphic/legacy field fallbacks (`planId`, `planID`, `progressTrackingId`, nested `plan.id` variants).
-- Standardized endpoint usage with leading slashes.
 - Deprecated user-based payload parameters in favor of session; specs updated consistently.
-- Frontend refactors eliminated redundant console logging for production readiness.
 
 ## 8. Frontend Logic & UX Adjustments
 
@@ -75,33 +66,30 @@ This document summarizes how the final Piggy Bank design evolved from the initia
 - Removed frequency rendering from milestone notifications; streamlined card headings.
 
 ## 9. Visual Design Adaptations (Assignment 4b Influence)
-
-- Typography: Clean sans-serif (Inter/Roboto/Open Sans) prioritizing numerical clarity and trust.
-- Personality fonts (Lora, Playfair, Poppins) limited to accent/emphasis—balance between aspiration and clarity.
+- I mostly stuck with my initial Visual Design Study but found that agentic coding tools were better able to implement my vision when I provided them with real apps that closely followed my design study:
+- Typography: Clean sans-serif (Inter/Roboto/Open Sans) prioritizing numerical clarity and trust. Although a study mentioned in class showed no significant difference in readability between serif and sans-serif fonts, I personally found sans-serif more appealing.
 - Color palette:
 	- Primary (teal/green palette) for success & progress reinforcement.
-	- Accent amber/purple sparingly for callouts and motivational cues.
+	- Accent pink for notifications to draw attention and provide color variability within the app.
 	- High-contrast choices for accessibility (goal progress & monetary figures).
 - Behavioral intent: Green reinforces steady growth; orange reserved for warnings; minimal noise (removed extraneous section labels like “Necessity”).
-- Alignment with product pitch: Motivating, low-friction, clarity-first presentations of savings trajectory.
+  
 
 ## 10. Divergences from Original Concept Spec
 
 - Authentication model: User → Session (systemic change).
-- Queries: Full object returns → ID-only, enforcing independence.
+- Queries: Full object returns by LLM → ID-only, enforcing independence and specific parameters returned when needed.
 - Notification lifecycle: Added milestone + savings reminder mechanics absent in initial spec.
 - City validation dropped (delegated to LLM logic).
-- Separation of AI estimate vs total cost retained (design note #9) despite potential sync consolidation—in service of future daily cost display extensibility.
-- Refined synchronization semantics: Avoided intra-concept auto-chaining where frontend control yields better UX flexibility.
-- Reduced defensive normalization—pruned speculative field matching.
+- Separation of AI estimate vs total cost retained, despite LLM being capable of computing total costs of trips across multiple nights, but could be unreliable in those instances.
+- Refined synchronization semantics by avoiding intra-concept auto-chaining with syncs, as it didn’t align with the intended purpose of syncs, facilitating synchronization between different concepts.
+
 
 ## 11. Key Design Lessons Incorporated
 
 - Continuous spec alignment prevents drift (representation independence).
-- Outcome-centric LLM prompting lowers parsing burden.
-- Session centralization simplifies payload contracts and reduces leakage risk.
+- Session centralization simplifies payload contracts and increases the security of the application.
 - Preservation strategies needed when backend eventual consistency or delayed visibility occurs.
-- Refactoring for minimalism improved reliability and onboarding velocity.
 
 ## Snapshot References (Immutable Moments)
 
@@ -111,7 +99,7 @@ This document summarizes how the final Piggy Bank design evolved from the initia
 - TripCostEstimation LLM prompt evolution: [20251016_133650.417c74c9](../../context/design/concepts/TripCostEstimation/comparison-two-implementations.md/20251016_133650.417c74c9.md)
 - Parsing reliability test (LLM variability): [20251017_184647.70888acc](../../context/src/concepts/TripCostEstimation/TripCostEstimationConcept.test.ts/20251017_184647.70888acc.md)
 
-## Final Summary (At a Glance)
+## Final Summary
 
 - Auth: Session-only unifies flows.
 - Data: ID-return queries enforce abstraction.
@@ -119,4 +107,3 @@ This document summarizes how the final Piggy Bank design evolved from the initia
 - ProgressTracking: Cleaner ID handling; manual notification orchestration.
 - LLM Integration: Prompt simplified; parsing lean.
 - Visual Design: Trust + clarity + motivation; reduced cognitive load.
-- Architecture: Less redundancy, stronger isolation, spec-aligned simplicity.
