@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "design/background/implementing-synchronizations.md",
+                "file": "design/concepts/TripCostEstimation/TripCostEstimationSpec.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "implementing-synchronizations"
+              "title": "TripCostEstimationSpec"
             }
           }
         ]
@@ -169,8 +169,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "9b42b4503c7d88ad",
+  "active": "72b263cfa3df1cde",
   "lastOpenFiles": [
+    "src/syncs/progress.sync.ts",
+    "design/background/implementing-synchronizations.md",
     "src/syncs/notify.sync.ts",
     "design/concepts/Sessioning/implementation.md",
     "src/syncs/auth.sync.ts",
@@ -204,8 +206,6 @@
     "context/deno.json/20251029_190030.ed5a0d72.md",
     "design/concepts/TripCostEstimation/TripCostEstimationSpec.md",
     "deno.8410ee9a.tmp",
-    "context/design/concepts/TripCostEstimation/TripCostEstimationSpec.md/20251029_183635.bc0edcec.md",
-    "ctx.exe",
-    "ctx.exe.tmp-aeb79e91b7f9ae9d"
+    "ctx.exe"
   ]
 }

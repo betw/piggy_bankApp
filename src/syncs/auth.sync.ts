@@ -77,3 +77,53 @@ export const LogoutResponse: Sync = ({ request }) => ({
   ),
   then: actions([Requesting.respond, { request, status: "logged_out" }]),
 });
+
+// -- Get All Users (query passthrough via Requesting) -- //
+// As per query conventions, invoke the concept query in `where` and respond in `then`.
+export const GetAllUsersResponseSuccess: Sync = (
+  { request, session, user, users, error },
+) => ({
+  when: actions([
+    Requesting.request,
+    { path: "/PasswordAuthentication/_getAllUsers", session },
+    { request },
+  ]),
+  where: async (frames) => {
+    // Gate by session: resolve to a valid user before executing query
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    frames = await frames.query(
+      PasswordAuthentication._getAllUsers,
+      {},
+      { users, error },
+    );
+    frames = frames.filter((f) =>
+      (f as Record<symbol, unknown>)[users] !== undefined
+    );
+    return frames;
+  },
+  then: actions([Requesting.respond, { request, users }]),
+});
+
+export const GetAllUsersResponseError: Sync = (
+  { request, session, user, users, error },
+) => ({
+  when: actions([
+    Requesting.request,
+    { path: "/PasswordAuthentication/_getAllUsers", session },
+    { request },
+  ]),
+  where: async (frames) => {
+    // Gate by session: resolve to a valid user before executing query
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    frames = await frames.query(
+      PasswordAuthentication._getAllUsers,
+      {},
+      { users, error },
+    );
+    frames = frames.filter((f) =>
+      (f as Record<symbol, unknown>)[error] !== undefined
+    );
+    return frames;
+  },
+  then: actions([Requesting.respond, { request, error }]),
+});

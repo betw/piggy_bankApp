@@ -26,21 +26,11 @@
 
 export const inclusions: Record<string, string> = {
   // PasswordAuthentication
-  "/api/PasswordAuthentication/_getUserUsername": "",
-  "/api/PasswordAuthentication/_getAllUsers": "",
+  "/api/PasswordAuthentication/_getUserUsername":
+    "okay to lookup usernames with user id",
 
-  "/api/Notification/createNotification": "",
-  "/api/Notification/deleteNotification": "",
-  "/api/Notification/_getAllNotifications": "",
-  "/api/Notification/getNotificationMessageAndFreq": "",
-
-  "/api/ProgressTracking/createPlan": "",
-  "/api/ProgressTracking/addAmount": "",
-  "/api/ProgressTracking/removeAmount": "",
-  "/api/ProgressTracking/deletePlan": "",
-  "/api/ProgressTracking/modifyPlan": "",
-  "/api/ProgressTracking/updateGoalStatus": "",
-  "/api/ProgressTracking/_getPlans": "",
+  "/api/TripCostEstimation/_parseLLMCostEstimate":
+    "private method of TripCostEstimation but sync engine warns that it's a unverified route",
 };
 
 /**
@@ -67,9 +57,25 @@ export const exclusions: Array<string> = [
   "/api/TripCostEstimation/estimateCost",
   "/api/TripCostEstimation/getTravelDates",
 
+  // Notification
+  "/api/Notification/createNotification",
+  "/api/Notification/getNotificationMessageAndFreq",
+  "/api/Notification/deleteNotification",
+  "/api/Notification/_getAllNotifications",
+
+  // ProgressTracking
+  "/api/ProgressTracking/createPlan",
+  "/api/ProgressTracking/addAmount",
+  "/api/ProgressTracking/removeAmount",
+  "/api/ProgressTracking/deletePlan",
+  "/api/ProgressTracking/modifyPlan",
+  "/api/ProgressTracking/updateGoalStatus",
+  "/api/ProgressTracking/_getPlans",
+
   // PasswordAuthentication
   "/api/PasswordAuthentication/register",
   "/api/PasswordAuthentication/authenticate",
+  "/api/PasswordAuthentication/_getAllUsers",
 
   // Sessioning
   "/api/Sessioning/create",

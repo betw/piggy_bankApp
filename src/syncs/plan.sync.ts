@@ -1,5 +1,10 @@
 import { actions, Sync } from "@engine";
-import { Requesting, Sessioning, TripCostEstimation } from "@concepts";
+import {
+  Notification,
+  Requesting,
+  Sessioning,
+  TripCostEstimation,
+} from "@concepts";
 
 // When a client requests creating a travel plan and a valid session maps to a user,
 // call TripCostEstimation.createTravelPlan with the corresponding inputs.
@@ -263,17 +268,6 @@ export const GenerateAICostEstimate: Sync = (
   }]),
 });
 
-// Chain: after AI estimate is created, compute total cost
-// export const GenerateAICostEstimateAutoEstimate: Sync = (
-//   { user, travelPlan },
-// ) => ({
-//   when: actions(
-//     [TripCostEstimation.generateAICostEstimate, { user, travelPlan }],
-//   ),
-//   then: actions([TripCostEstimation.estimateCost, { user, travelPlan }]),
-// });
-
-// Respond only after auto-estimate has computed total cost
 export const GenerateAICostEstimateResponseSuccess: Sync = (
   { request, session, user, travelPlan, costEstimate },
 ) => ({
@@ -331,15 +325,6 @@ export const EditEstimateCost: Sync = (
   ]),
 });
 
-// Chain: after manual edit, compute total cost
-// export const EditEstimateCostAutoEstimate: Sync = ({ user, travelPlan }) => ({
-//   when: actions(
-//     [TripCostEstimation.editEstimateCost, { user, travelPlan }],
-//   ),
-//   then: actions([TripCostEstimation.estimateCost, { user, travelPlan }]),
-// });
-
-// Respond only after auto-estimate has computed total cost
 export const EditEstimateCostAutoEstimateResponseSuccess: Sync = (
   { request, session, user, travelPlan, costEstimate },
 ) => ({
@@ -357,23 +342,6 @@ export const EditEstimateCostAutoEstimateResponseSuccess: Sync = (
   ),
   then: actions([Requesting.respond, { request, costEstimate }]),
 });
-
-// If the chained total estimate fails, surface that error
-// export const EditEstimateCostAutoEstimateResponseError: Sync = (
-//   { request, session, user, travelPlan, error },
-// ) => ({
-//   when: actions(
-//     [Requesting.request, {
-//       path: "/TripCostEstimation/editEstimateCost",
-//       session,
-//     }, {
-//       request,
-//     }],
-//     [TripCostEstimation.editEstimateCost, { user, travelPlan }, {}],
-//     [TripCostEstimation.estimateCost, { user, travelPlan }, { error }],
-//   ),
-//   then: actions([Requesting.respond, { request, error }]),
-// });
 
 export const EditEstimateCostResponseError: Sync = (
   { request, session, error },
@@ -577,6 +545,104 @@ export const GetAllTravelPlansResponseError: Sync = (
       { user },
       { travelPlans, error },
     );
+    frames = frames.filter((f) =>
+      (f as Record<symbol, unknown>)[error] !== undefined
+    );
+    return frames;
+  },
+  then: actions([Requesting.respond, { request, error }]),
+});
+
+// --- Notification.deleteNotification ---
+export const DeleteNotification: Sync = (
+  { request, session, user, notification },
+) => ({
+  when: actions([
+    Requesting.request,
+    { path: "/Notification/deleteNotification", session, notification },
+    { request },
+  ]),
+  where: async (frames) => {
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    return frames;
+  },
+  then: actions([Notification.deleteNotification, { user, notification }]),
+});
+
+export const DeleteNotificationResponseSuccess: Sync = (
+  { request, session, user: _user, notification },
+) => ({
+  when: actions(
+    [
+      Requesting.request,
+      { path: "/Notification/deleteNotification", session, notification },
+      { request },
+    ],
+    // Correlate to the specific notification being deleted
+    [Notification.deleteNotification, { notification }, {}],
+  ),
+  then: actions([Requesting.respond, { request, notification }]),
+});
+
+export const DeleteNotificationResponseError: Sync = (
+  { request, session, user: _user, notification, error },
+) => ({
+  when: actions(
+    [
+      Requesting.request,
+      { path: "/Notification/deleteNotification", session, notification },
+      { request },
+    ],
+    // Correlate error with the specific notification delete attempt
+    [Notification.deleteNotification, { notification }, { error }],
+  ),
+  then: actions([Requesting.respond, { request, error }]),
+});
+
+// --- Notification._getAllNotifications ---
+// Query-driven response: run the query in where and reply with notifications
+export const GetAllNotificationsResponseSuccess: Sync = (
+  { request, session, user, notifications, error },
+) => ({
+  when: actions(
+    [Requesting.request, {
+      path: "/Notification/_getAllNotifications",
+      session,
+    }, { request }],
+  ),
+  where: async (frames) => {
+    // Map session -> user first to enforce sessioning at query time
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    // Run the notifications query for the resolved user
+    frames = await frames.query(Notification._getAllNotifications, { user }, {
+      notifications,
+      error,
+    });
+    frames = frames.filter((f) =>
+      (f as Record<symbol, unknown>)[notifications] !== undefined
+    );
+    return frames;
+  },
+  then: actions([Requesting.respond, { request, notifications }]),
+});
+
+export const GetAllNotificationsResponseError: Sync = (
+  { request, session, user, notifications, error },
+) => ({
+  when: actions(
+    [Requesting.request, {
+      path: "/Notification/_getAllNotifications",
+      session,
+    }, { request }],
+  ),
+  where: async (frames) => {
+    // Map session -> user first to enforce sessioning at query time
+    frames = await frames.query(Sessioning._getUser, { session }, { user });
+    // Run the notifications query for the resolved user
+    frames = await frames.query(Notification._getAllNotifications, { user }, {
+      notifications,
+      error,
+    });
     frames = frames.filter((f) =>
       (f as Record<symbol, unknown>)[error] !== undefined
     );
